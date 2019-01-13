@@ -7,16 +7,16 @@ import { MAX_DEPTH, MAX_HP, FLAG_SCORE } from './constants';
 
 class App extends Component {
   state = {
-    // player: {
-    //   x: Math.floor(Math.random() * 8),
-    //   y: Math.floor(Math.random() * 8),
-    // },
-    // monster: {
-    //   x: Math.floor(Math.random() * 8) + 8,
-    //   y: Math.floor(Math.random() * 8) + 8,
-    // },
-    player: { x: 0, y: 0 },
-    monster: { x: 0, y: 5 },
+    player: {
+      x: Math.floor(Math.random() * 8),
+      y: Math.floor(Math.random() * 8),
+    },
+    monster: {
+      x: Math.floor(Math.random() * 8) + 8,
+      y: Math.floor(Math.random() * 8) + 8,
+    },
+    // player: { x: 0, y: 0 },
+    // monster: { x: 0, y: 5 },
     items: [],
     key: '',
     score: 0,
