@@ -3,23 +3,24 @@ import './App.css';
 import { mazeDir } from './maze';
 import Map from './components/Map';
 import Header from './components/Header';
+import { MAX_DEPTH, MAX_HP, FLAG_SCORE } from './constants';
 
 class App extends Component {
   state = {
-    player: {
-      x: Math.floor(Math.random() * 8),
-      y: Math.floor(Math.random() * 8),
-    },
-    monster: {
-      x: Math.floor(Math.random() * 8) + 8,
-      y: Math.floor(Math.random() * 8) + 8,
-    },
-    // player: { x: 0, y: 0 },
-    // monster: { x: 0, y: 5 },
+    // player: {
+    //   x: Math.floor(Math.random() * 8),
+    //   y: Math.floor(Math.random() * 8),
+    // },
+    // monster: {
+    //   x: Math.floor(Math.random() * 8) + 8,
+    //   y: Math.floor(Math.random() * 8) + 8,
+    // },
+    player: { x: 0, y: 0 },
+    monster: { x: 0, y: 5 },
     items: [],
     key: '',
     score: 0,
-    hp: 5,
+    hp: MAX_HP,
     status: 'start',
   };
   componentDidMount() {
@@ -49,6 +50,7 @@ class App extends Component {
       default:
     }
     this.moveMonster();
+    this.checkScore();
   }
   monsterAttack() {
     const { hp, monster, player, key } = this.state;
@@ -91,27 +93,30 @@ class App extends Component {
     this.setState({ player: pos });
   }
   attack() {
-    if (
-      this.state.player.x === this.state.monster.x &&
-      this.state.player.y === this.state.monster.y
-    ) {
-      const monster = {
-        x: Math.floor(Math.random() * 16),
-        y: Math.floor(Math.random() * 16),
-      };
+    const { monster, player, score, items } = this.state;
+    if (player.x === monster.x && player.y === monster.y) {
       this.setState({
-        monster,
-        items: [...this.state.items, { ...this.state.player }],
-        score: this.state.score + 1,
+        monster: {
+          x: Math.floor(Math.random() * 16),
+          y: Math.floor(Math.random() * 16),
+        },
+        items: [...items, { ...player }],
+        score: score + 1,
       });
     } else {
       alert('Boom!');
     }
   }
+  checkScore() {
+    if (this.state.score === FLAG_SCORE) {
+      this.setState({ status: 'flag' });
+    }
+  }
   pick() {
+    const { items, player, hp } = this.state;
     let itemIndex = -1;
-    this.state.items.forEach(({ x, y }, i) => {
-      if (x === this.state.player.x && y === this.state.player.y) {
+    items.forEach(({ x, y }, i) => {
+      if (x === player.x && y === player.y) {
         itemIndex = i;
       }
     });
@@ -119,35 +124,26 @@ class App extends Component {
       alert('Boom!');
       return;
     }
-    const items = this.state.items.filter((_, i) => i !== itemIndex);
-    let hp = this.state.hp;
-    hp = hp === 5 ? 5 : hp + 1;
     this.setState({
-      items,
-      hp,
+      items: items.filter((_, i) => i !== itemIndex),
+      hp: hp <= MAX_HP ? MAX_HP : hp + 1,
     });
   }
   renderItems() {
     return this.state.items.map((pos, i) => <Item key={i} {...pos} c="i" />);
   }
   renderMonster() {
+    const { player, monster } = this.state;
     let c = 'M';
-    if (
-      this.state.player.x === this.state.monster.x &&
-      this.state.player.y === this.state.monster.y
-    )
-      c = 'B';
-    return <Item c={c} {...this.state.monster} />;
+    if (player.x === monster.x && player.y === monster.y) c = 'B';
+    return <Item c={c} {...monster} />;
   }
   renderPlayer() {
+    const { player, items } = this.state;
     let c = 'O';
-    const item = this.state.items.find(
-      pos => pos.x === this.state.player.x && pos.y === this.state.player.y,
-    );
-    if (item) c = 'G';
-    return <Item c={c} {...this.state.player} />;
+    if (items.find(pos => pos.x === player.x && pos.y === player.y)) c = 'G';
+    return <Item c={c} {...player} />;
   }
-
   render() {
     if (this.state.status === 'gameOver') {
       window.removeEventListener('keypress', this.changeKey);
@@ -187,7 +183,7 @@ function checkWall(pos, dir) {
   }
 }
 function dfs(pos, depth, last, playerPos) {
-  if (depth === 5) return false;
+  if (depth === MAX_DEPTH) return false;
   if (playerPos.x === pos.x && playerPos.y === pos.y) return pos;
   for (let dir = 0; dir < 4; dir++) {
     if ((last ^ 1) === dir) continue;

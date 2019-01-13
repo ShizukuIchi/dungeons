@@ -1,4 +1,5 @@
 import React from 'react';
+import { FLAG } from '../../constants';
 
 function Header({ score, title, hp, status }) {
   return (
@@ -16,7 +17,7 @@ function Header({ score, title, hp, status }) {
         </div>
       </div>
       <div>{title}</div>
-      <div>{status === 'gameOver' ? 'Game Over' : ''}</div>
+      <div>{getStatusString(status)}</div>
     </div>
   );
 }
@@ -30,5 +31,15 @@ function formatScore(score) {
     );
   }
   return score;
+}
+function getStatusString(status) {
+  switch (status) {
+    case 'gameOver':
+      return 'Game Over';
+    case 'flag':
+      return FLAG;
+    default:
+      return '';
+  }
 }
 export default Header;
