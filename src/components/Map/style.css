@@ -2,6 +2,8 @@
   display: grid;
   grid-template-columns: repeat(16, 50px);
   grid-template-rows: repeat(16, 50px);
+  position: relative;
+  z-index: 2;
 }
 .block {
   border: 1px solid transparent;
