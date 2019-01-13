@@ -14,10 +14,13 @@ class App extends Component {
       x: Math.floor(Math.random() * 8) + 8,
       y: Math.floor(Math.random() * 8) + 8,
     },
+    // player: { x: 0, y: 0 },
+    // monster: { x: 8, y: 0 },
     items: [],
     key: '',
     score: 0,
     hp: 5,
+    status: 'start',
   };
   componentDidMount() {
     window.addEventListener('keypress', this.changeKey);
@@ -64,14 +67,32 @@ class App extends Component {
         return this.attack();
       default:
     }
-    if (pos.x >= 0 && pos.x < 16 && pos.y >= 0 && pos.y < 16) {
-      this.setState({
-        player: pos,
-        key: '',
-      });
-    } else {
-      alert('Boom!');
+    const monster = this.dfs(this.state.monster, 0, 42, pos);
+    let hp = this.state.hp;
+    if (
+      this.state.monster.x === this.state.player.x &&
+      this.state.monster.y === this.state.player.y
+    ) {
+      if (hp > 2) {
+        hp -= 2;
+      } else {
+        this.setState({
+          player: pos,
+          key: '',
+          hp: 0,
+          monster: monster ? monster : this.state.monster,
+          status: 'gameOver',
+        });
+        return;
+      }
     }
+
+    this.setState({
+      player: pos,
+      key: '',
+      hp,
+      monster: monster ? monster : this.state.monster,
+    });
   }
   attack() {
     if (
@@ -130,13 +151,46 @@ class App extends Component {
     if (item) c = 'G';
     return <Item c={c} {...this.state.player} />;
   }
+  dfs = (pos, depth, last, playerPos) => {
+    if (depth === 5) return false;
+    if (playerPos.x === pos.x && playerPos.y === pos.y) return pos;
+    for (let dir = 0; dir < 4; dir++) {
+      if ((last ^ 1) === dir) continue;
+      if (checkWall(pos, dir)) {
+        let newPos = { ...pos };
+        switch (dir) {
+          case 0:
+            newPos.y -= 1;
+            break;
+          case 1:
+            newPos.y += 1;
+            break;
+          case 2:
+            newPos.x -= 1;
+            break;
+          case 3:
+            newPos.x += 1;
+            break;
+          default:
+        }
+        if (this.dfs(newPos, depth + 1, dir, playerPos)) {
+          return newPos;
+        }
+      }
+    }
+    return false;
+  };
   render() {
+    if (this.state.status === 'gameOver') {
+      window.removeEventListener('keypress', this.changeKey);
+    }
     return (
       <div className="App" ref={r => (this.game = r)}>
         <Header
           title="Dungeons v1.0.1"
           score={this.state.score}
           hp={this.state.hp}
+          status={this.state.status}
         />
         {this.renderItems()}
         {this.renderPlayer()}
