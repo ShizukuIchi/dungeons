@@ -6,8 +6,14 @@ import Header from './components/Header';
 
 class App extends Component {
   state = {
-    player: { x: 10, y: 0 },
-    monster: { x: 2, y: 2 },
+    player: {
+      x: Math.floor(Math.random() * 8),
+      y: Math.floor(Math.random() * 8),
+    },
+    monster: {
+      x: Math.floor(Math.random() * 8) + 8,
+      y: Math.floor(Math.random() * 8) + 8,
+    },
     items: [],
     key: '',
     score: 0,
