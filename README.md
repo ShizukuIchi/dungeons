@@ -10,3 +10,4 @@
 - `q`: no action
 
 * `Enter`: fire action
+* `r`: auto
