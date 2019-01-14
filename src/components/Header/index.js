@@ -1,7 +1,7 @@
 import React from 'react';
-import { FLAG } from '../../constants';
+import { FLAG, STATUS, TITLE } from '../../constants';
 
-function Header({ score, title, hp, status }) {
+function Header({ score, auto, hp, status }) {
   return (
     <div className="header">
       <div className="left">
@@ -16,7 +16,7 @@ function Header({ score, title, hp, status }) {
             .map(_ => 'x')}
         </div>
       </div>
-      <div>{title}</div>
+      <div>{auto ? `${TITLE} (auto)` : TITLE}</div>
       <div>{getStatusString(status)}</div>
     </div>
   );
@@ -34,9 +34,9 @@ function formatScore(score) {
 }
 function getStatusString(status) {
   switch (status) {
-    case 'gameOver':
+    case STATUS.GAME_OVER:
       return 'Game Over';
-    case 'flag':
+    case STATUS.FLAG:
       return FLAG;
     default:
       return '';
