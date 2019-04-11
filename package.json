@@ -1,7 +1,7 @@
 {
-  "name": "dungeon",
-  "version": "0.1.0",
-  "homepage": "https://dungeons.csie.io",
+  "name": "dungeons",
+  "version": "1.0.2",
+  "homepage": "https://maze.now.sh",
   "private": true,
   "dependencies": {
     "react": "^16.8.0-alpha.0",
