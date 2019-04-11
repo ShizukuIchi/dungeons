@@ -1,8 +1,7 @@
 import React from 'react';
 import './style.css';
-import { mazeDir } from '../../maze';
 
-const Map = () => {
+const Map = ({ mazeDir }) => {
   return (
     <div className="map">
       {mazeDir.map((dir, i) => (

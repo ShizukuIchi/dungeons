@@ -25,8 +25,7 @@ function formatScore(score) {
   if (String(score).length < 5) {
     return (
       Array(5 - String(score).length)
-        .fill()
-        .map(_ => '0')
+        .fill(0)
         .join('') + score
     );
   }

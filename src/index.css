@@ -16,6 +16,6 @@ body,
 
 *,
 *:after,
-*:berfore {
+*:before {
   box-sizing: border-box;
 }

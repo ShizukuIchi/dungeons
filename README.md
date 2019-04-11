@@ -2,12 +2,25 @@
 
 > Dungeons is so evil
 
+Features:
+
+- Generate random maze per game.
+- Press `r` for auto-play.
+
 ## How to play
 
-- `w`, `s`, `a`, `d`: movement
-- `e`: pick item
-- `f`: attack
-- `q`: no action
+Press `Enter` to execute a command.
 
-* `Enter`: fire action
-* `r`: auto
+### Commands
+
+- Movement: `w`, `s`, `a`, `d`
+- Attack: `f`
+- Pick Item: `e`
+
+## [Try it](https://dungeons.now.sh)
+
+Kill 100 monsters to get the flag! 👉 [https://dungeons.now.sh](https://dungeons.now.sh)
+
+|                   Auto Play                   |                   Random Maze                   |
+| :-------------------------------------------: | :---------------------------------------------: |
+| [![](demo/auto.gif)](https://dungeons.now.sh) | [![](demo/random.gif)](https://dungeons.now.sh) |

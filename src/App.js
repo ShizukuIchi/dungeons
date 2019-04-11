@@ -1,22 +1,29 @@
 import React, { Component } from 'react';
 import './App.css';
-import { mazeDir } from './maze';
+import genMaze from './genMaze';
 import Map from './components/Map';
 import Header from './components/Header';
-import { MAX_DEPTH, MAX_HP, FLAG_SCORE, STATUS } from './constants';
+import {
+  MAX_DEPTH,
+  MAX_HP,
+  FLAG_SCORE,
+  STATUS,
+  ROWS,
+  COLUMNS,
+} from './constants';
+
+const mazeDir = genMaze(ROWS, COLUMNS);
 
 class App extends Component {
   state = {
     player: {
-      x: Math.floor(Math.random() * 8),
-      y: Math.floor(Math.random() * 8),
+      x: Math.floor((Math.random() * COLUMNS) / 2),
+      y: Math.floor((Math.random() * ROWS) / 2),
     },
     monster: {
-      x: Math.floor(Math.random() * 8) + 8,
-      y: Math.floor(Math.random() * 8) + 8,
+      x: Math.floor((Math.random() * COLUMNS) / 2) + COLUMNS / 2,
+      y: Math.floor((Math.random() * ROWS) / 2) + ROWS / 2,
     },
-    // player: { x: 0, y: 0 },
-    // monster: { x: 0, y: 5 },
     items: [],
     key: '',
     score: 0,
@@ -48,7 +55,7 @@ class App extends Component {
     if (key === 'Enter') {
       this.action();
       this.setState({ key: '' });
-    } else if ('wsadefq'.includes(key)) this.setState({ key });
+    } else if ('wsadef'.includes(key)) this.setState({ key });
   };
   autoAction = () => {
     this.movePlayerAuto();
@@ -91,13 +98,7 @@ class App extends Component {
     }
   }
   moveMonster() {
-    const monster = dfs(
-      this.state.monster,
-      0,
-      42,
-      this.state.player,
-      MAX_DEPTH
-    );
+    const monster = dfs(this.state.monster, 0, 4, this.state.player, MAX_DEPTH);
     if (monster) this.setState({ monster });
   }
   movePlayer() {
@@ -151,7 +152,7 @@ class App extends Component {
           items: [...items, { ...player }],
           score: score + 1,
         },
-        this.checkScore
+        this.checkScore,
       );
     } else {
       alert('Boom!');
@@ -176,7 +177,7 @@ class App extends Component {
     }
     this.setState({
       items: items.filter((_, i) => i !== itemIndex),
-      hp: hp <= MAX_HP ? MAX_HP : hp + 1,
+      hp: hp < MAX_HP ? hp + 1 : MAX_HP,
     });
   }
   renderItems() {
@@ -196,12 +197,12 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="App" ref={r => (this.game = r)}>
+      <div className="App">
         <Header {...this.state} />
         {this.renderItems()}
         {this.renderPlayer()}
         {this.renderMonster()}
-        <Map />
+        <Map mazeDir={mazeDir} />
         <div className="key">{`[>] action: ${this.state.key}`}</div>
       </div>
     );
@@ -218,11 +219,7 @@ const Item = ({ x, y, c }) => (
 );
 
 function checkWall(pos, dir) {
-  if (mazeDir[pos.x + pos.y * 16][dir]) {
-    return true;
-  } else {
-    return false;
-  }
+  return mazeDir[pos.x + pos.y * 16][dir];
 }
 function dfs(pos, depth, last, desPos, maxDepth) {
   if (depth === maxDepth) return false;
