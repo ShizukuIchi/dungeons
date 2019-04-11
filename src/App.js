@@ -55,7 +55,7 @@ class App extends Component {
     if (key === 'Enter') {
       this.action();
       this.setState({ key: '' });
-    } else if ('wsadefq'.includes(key)) this.setState({ key });
+    } else if ('wsadef'.includes(key)) this.setState({ key });
   };
   autoAction = () => {
     this.movePlayerAuto();
@@ -177,7 +177,7 @@ class App extends Component {
     }
     this.setState({
       items: items.filter((_, i) => i !== itemIndex),
-      hp: hp <= MAX_HP ? MAX_HP : hp + 1,
+      hp: hp < MAX_HP ? hp + 1 : MAX_HP,
     });
   }
   renderItems() {
@@ -197,7 +197,7 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="App" ref={r => (this.game = r)}>
+      <div className="App">
         <Header {...this.state} />
         {this.renderItems()}
         {this.renderPlayer()}
@@ -219,11 +219,7 @@ const Item = ({ x, y, c }) => (
 );
 
 function checkWall(pos, dir) {
-  if (mazeDir[pos.x + pos.y * 16][dir]) {
-    return true;
-  } else {
-    return false;
-  }
+  return mazeDir[pos.x + pos.y * 16][dir];
 }
 function dfs(pos, depth, last, desPos, maxDepth) {
   if (depth === maxDepth) return false;

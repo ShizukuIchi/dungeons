@@ -6,5 +6,6 @@
   z-index: 2;
 }
 .block {
-  border: 1px solid transparent;
+  border-width: 1px;
+  border-style: solid;
 }
