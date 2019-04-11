@@ -4,6 +4,7 @@
   grid-template-rows: repeat(16, 50px);
   position: relative;
   z-index: 2;
+  border: 1px solid white;
 }
 .block {
   border-width: 1px;
