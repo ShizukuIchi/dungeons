@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "maze",
+  "name": "dungeons",
   "builds": [
     {
       "src": "package.json",
