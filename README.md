@@ -21,6 +21,8 @@ Press `Enter` to execute a command.
 
 Kill 100 monsters to get the flag! 👉 [https://dungeons.now.sh](https://dungeons.now.sh)
 
-|                   Auto Play                   |                   Random Maze                   |
-| :-------------------------------------------: | :---------------------------------------------: |
-| [![](demo/auto.gif)](https://dungeons.now.sh) | [![](demo/random.gif)](https://dungeons.now.sh) |
+- Auto play
+[![](demo/auto.gif)](https://dungeons.now.sh)
+
+- Random maze
+[![](demo/random.gif)](https://dungeons.now.sh)
